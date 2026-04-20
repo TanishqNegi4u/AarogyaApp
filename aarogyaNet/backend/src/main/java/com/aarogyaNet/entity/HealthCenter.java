@@ -2,6 +2,15 @@ package com.aarogyaNet.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@Entity
+@Table(name = "health_centers")
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class HealthCenter {
+    // ... rest unchanged
+}
 
 @Entity
 @Table(name = "health_centers")
