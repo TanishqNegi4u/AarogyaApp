@@ -12,6 +12,30 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+// Change register() signature:
+@Transactional
+public AuthResponse register(RegisterRequest request) {
+    // ... existing code unchanged
+}
+
+// Change login() last lookup line:
+public AuthResponse login(LoginRequest request) {
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+            request.getEmail(), request.getPassword()));
+    User user = userRepository.findByEmail(request.getEmail())
+        .orElseThrow(() ->
+            new UsernameNotFoundException("User not found: " + request.getEmail()));
+    String token = jwtService.generateToken(user);
+    return AuthResponse.builder()
+        .token(token).userId(user.getId())
+        .fullName(user.getFullName())
+        .email(user.getEmail()).role(user.getRole())
+        .build();
+}
 
 @Service
 @RequiredArgsConstructor
