@@ -14,7 +14,10 @@ public class HealthCenterService {
     public List<HealthCenter> getAll() {
         return repo.findAll();
     }
-
+public HealthCenter getById(String id) {
+    return repo.findById(id).orElseThrow(
+        () -> new ResourceNotFoundException("Health center not found: " + id));
+}
     public List<HealthCenter> getByState(String state) {
         return repo.findByState(state);
     }
