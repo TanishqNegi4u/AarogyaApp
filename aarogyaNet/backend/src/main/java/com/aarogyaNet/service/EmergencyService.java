@@ -8,6 +8,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+public void resolveEmergency(String id) {
+    EmergencyRequest emergency = emergencyRepo.findById(id)
+        .orElseThrow(() -> new RuntimeException("Emergency not found: " + id));
+    emergency.setStatus("RESOLVED");
+    emergency.setResolvedAt(LocalDateTime.now());
+    emergencyRepo.save(emergency);
+}
+
 @Service
 @RequiredArgsConstructor
 public class EmergencyService {
